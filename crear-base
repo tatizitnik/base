@@ -1,11 +1,17 @@
 -- Crear la base de datos
-CREATE DATABASE MiBaseDeDatos;
+CREATE DATABASE IF NOT EXISTS MiBaseDeDatos;
 
 -- Usar la base de datos creada
 USE MiBaseDeDatos;
 
+-- Crear tabla de Materias Primas
+CREATE TABLE IF NOT EXISTS Materias_Primas (
+    id_mp INT PRIMARY KEY,
+    nombre_mp VARCHAR(100)
+);
+
 -- Crear tabla de Medicamentos
-CREATE TABLE Medicamentos (
+CREATE TABLE IF NOT EXISTS Medicamentos (
     id_med INT PRIMARY KEY,
     nombre_med VARCHAR(100),
     precio_med DECIMAL(10, 2),
@@ -14,7 +20,7 @@ CREATE TABLE Medicamentos (
 );
 
 -- Crear tabla de Lotes
-CREATE TABLE Lotes (
+CREATE TABLE IF NOT EXISTS Lotes (
     id_lote INT PRIMARY KEY,
     id_med INT,
     nombre_med VARCHAR(100),
@@ -23,14 +29,8 @@ CREATE TABLE Lotes (
     FOREIGN KEY (id_med) REFERENCES Medicamentos(id_med)
 );
 
--- Crear tabla de Materias Primas
-CREATE TABLE Materias_Primas (
-    id_mp INT PRIMARY KEY,
-    nombre_mp VARCHAR(100)
-);
-
 -- Crear tabla de Proveedores
-CREATE TABLE Proveedores (
+CREATE TABLE IF NOT EXISTS Proveedores (
     id_prov INT PRIMARY KEY,
     nombre_prov VARCHAR(100),
     direccion VARCHAR(200),
@@ -40,8 +40,18 @@ CREATE TABLE Proveedores (
     FOREIGN KEY (id_mp) REFERENCES Materias_Primas(id_mp)
 );
 
+-- Crear tabla de Empleados
+CREATE TABLE IF NOT EXISTS Empleados (
+    id_emp INT PRIMARY KEY,
+    nombre_emp VARCHAR(50),
+    apellido_emp VARCHAR(50),
+    puesto VARCHAR(50),
+    correo_elect VARCHAR(100),
+    telefono VARCHAR(20)
+);
+
 -- Crear tabla de Orden de Compra
-CREATE TABLE Orden_de_Compra (
+CREATE TABLE IF NOT EXISTS Orden_de_Compra (
     id_oc INT PRIMARY KEY,
     fecha_oc DATE,
     costo_total DECIMAL(10, 2),
@@ -51,18 +61,8 @@ CREATE TABLE Orden_de_Compra (
     FOREIGN KEY (id_emp) REFERENCES Empleados(id_emp)
 );
 
--- Crear tabla de Empleados
-CREATE TABLE Empleados (
-    id_emp INT PRIMARY KEY,
-    nombre_emp VARCHAR(50),
-    apellido_emp VARCHAR(50),
-    puesto VARCHAR(50),
-    correo_elect VARCHAR(100),
-    telefono VARCHAR(20)
-);
-
 -- Crear tabla de Detalle de la OC
-CREATE TABLE Detalle_OC (
+CREATE TABLE IF NOT EXISTS Detalle_OC (
     id_detalle_oc INT PRIMARY KEY,
     cantidad INT,
     precio_mp DECIMAL(10, 2),
