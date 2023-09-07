@@ -403,3 +403,26 @@ VALUES
     (4003, 'Carlos', 'Martínez', 'Gerente de Compras', 'carlos.martinez@biofarmalab.com', '4567890123'),
     (4004, 'Ana', 'López', 'Asistente Administrativo', 'ana.lopez@biofarmalab.com', '3219876540'),
     (4005, 'Pedro', 'Ramírez', 'Técnico de Control de Calidad', 'pedro.ramirez@biofarmalab.com', '7890123456');
+
+-- Insertar datos en la tabla "Orden_de_Compra"
+INSERT INTO Orden_de_Compra (id_oc, fecha_oc, costo_total, id_prov, id_emp)
+VALUES
+    (50001, '2023-07-20', 2500.00, 3001, 4001),
+    (50002, '2023-07-21', 1800.00, 3002, 4002),
+    (50003, '2023-07-22', 3200.00, 3003, 4003),
+    (50004, '2023-07-23', 1400.00, 3004, 4004),
+    (50005, '2023-07-24', 1950.00, 3005, 4005);
+
+-- Insertar datos en la tabla "Detalle_OC"
+INSERT INTO Detalle_OC (id_detalle_oc, cantidad, precio_mp, total_unid, id_mp, id_oc)
+VALUES
+    (60001, 50, 5.00, 250, 1, 50001),
+    (60002, 40, 4.50, 180, 2, 50001),
+    (60003, 30, 6.00, 180, 2, 50002),
+    (60004, 20, 3.50, 70, 3, 50002),
+    (60005, 15, 4.00, 60, 4, 50003),
+    (60006, 25, 3.80, 95, 5, 50003),
+    (60007, 10, 7.00, 70, 7, 50004),
+    (60008, 18, 4.20, 75, 6, 50004),
+    (60009, 22, 5.10, 112, 8, 50005),
+    (600010, 30, 6.20, 186, 9, 50005);
