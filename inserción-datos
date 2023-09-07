@@ -1,0 +1,25 @@
+-- Insertar datos en la tabla "MateriasPrimas"
+INSERT INTO MateriasPrimas (id_mp, nombre_mp)
+VALUES
+    (1, 'Agua destilada'),
+    (2, 'Alcohol etílico'),
+    (3, 'Azúcar'),
+    (4, 'Aceite de ricino'),
+    (5, 'Ácido ascórbico (vitamina C)'),
+    (6, 'Ácido acetilsalicílico'),
+    (7, 'Lactosa'),
+    (8, 'Estearato de magnesio'),
+    (9, 'Paracetamol'),
+    (10, 'Glicerina'),
+    (11, 'Hidroxipropil metilcelulosa (HPMC)'),
+    (12, 'Propilenglicol'),
+    (13, 'Sorbitol'),
+    (14, 'Vaselina'),
+    (15, 'Hidrocortisona'),
+    (16, 'Talco'),
+    (17, 'Lanolina'),
+    (18, 'Cloruro de sodio (sal)'),
+    (19, 'Etilenglicol'),
+    (20, 'Polietilenglicol (PEG)'),
+    (21, 'Metilparabeno y propilparabeno'),
+    (22, 'Propilparabeno');
