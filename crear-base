@@ -19,6 +19,16 @@ CREATE TABLE IF NOT EXISTS Medicamentos (
     FOREIGN KEY (id_mp) REFERENCES Materias_Primas(id_mp)
 );
 
+-- Crear la tabla "Relacion"
+CREATE TABLE IF NOT EXISTS Relacion (
+    id_relacion INT PRIMARY KEY,
+    id_med INT,
+    id_mp INT,
+    cantidad_necesaria INT,
+    FOREIGN KEY (id_med) REFERENCES Medicamentos(id_med),
+    FOREIGN KEY (id_mp) REFERENCES MateriasPrimas(id_mp)
+);
+
 -- Crear tabla de Lotes
 CREATE TABLE IF NOT EXISTS Lotes (
     id_lote INT PRIMARY KEY,
