@@ -1,0 +1,74 @@
+-- Crear Vista Detalles de Compras
+CREATE VIEW VistaDetallesCompras AS
+SELECT
+    OC.id_oc,
+    OC.fecha_oc,
+    P.nombre_prov AS proveedor,
+    E.nombre_emp AS empleado,
+    MP.nombre_mp AS materia_prima,
+    D.cantidad,
+    D.precio_mp
+FROM
+    Orden_de_Compra OC
+JOIN
+    Proveedores P ON OC.id_prov = P.id_prov
+JOIN
+    Empleados E ON OC.id_emp = E.id_emp
+JOIN
+    Detalle_OC D ON OC.id_oc = D.id_oc
+JOIN
+    Materias_Primas MP ON D.id_mp = MP.id_mp;
+
+-- Crear Vista Medicamentos con Materias Primas
+CREATE VIEW VistaMedicamentosConMateriasPrimas AS
+SELECT
+    M.id_med,
+    M.nombre_med,
+    MP.nombre_mp AS materia_prima,
+    R.cantidad_necesaria
+FROM
+    Medicamentos M
+JOIN
+    Relacion R ON M.id_med = R.id_med
+JOIN
+    Materias_Primas MP ON R.id_mp = MP.id_mp;
+
+-- Crear Vista Inventario con Lote
+CREATE VIEW VistaInventarioConLotes AS
+SELECT
+    M.id_med,
+    M.nombre_med,
+    M.precio_med,
+    MP.nombre_mp,
+    L.fecha_ven,
+    L.unidades
+FROM
+    Medicamentos M
+JOIN
+    Materias_Primas MP ON M.id_mp = MP.id_mp
+LEFT JOIN
+    Lotes L ON M.id_med = L.id_med;
+
+-- Crear Vista Compras por Proveedor
+CREATE VIEW VistaComprasPorProveedor AS
+SELECT
+    P.nombre_prov AS proveedor,
+    SUM(OC.costo_total) AS total_comprado
+FROM
+    Orden_de_Compra OC
+JOIN
+    Proveedores P ON OC.id_prov = P.id_prov
+GROUP BY
+    P.nombre_prov;
+
+-- Crear Vista Empleados con Compras
+CREATE VIEW VistaEmpleadosConCompras AS
+SELECT
+    E.nombre_emp AS empleado,
+    SUM(OC.costo_total) AS total_comprado
+FROM
+    Orden_de_Compra OC
+JOIN
+    Empleados E ON OC.id_emp = E.id_emp
+GROUP BY
+    E.nombre_emp;
