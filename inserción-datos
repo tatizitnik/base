@@ -387,13 +387,13 @@ VALUES
     (20150, 149, 'Amitriptilina', ' 2023-05-10', 700);
 
 -- Insertar datos en la tabla "Proveedores"
-INSERT INTO Proveedores (id_prov, nombre_prov, direccion, telefono, correo_elect, id_mp, nombre_mp)
+INSERT INTO Proveedores (id_prov, nombre_prov, direccion, telefono, correo_elect, id_mp)
 VALUES
-    (3001, 'Suministros Farmacéuticos S.A.', 'Calle 123, Zárate', '1234567890', 'suministros@farmaceuticos.com', 1, 'Agua destilada'),
-    (3002, 'Materias Primas Industriales Ltda.', 'Avenida XYZ, Pilar', '9876543210', 'info@materiasprimas-industriales.com', 2, 'Alcohol etílico'),
-    (3003, 'Distribuidora de Químicos y Suministros Médicos S.A.', 'Calle 456, Rosario', '4567890123', 'contacto@distribuidora-quimicos.com', 3, 'Azúcar'),
-    (3004, 'Proveedoría Médica Internacional S.A.C.', 'Avenida LMN, CABA', '3219876540', 'ventas@proveedoria-medica.com', 4, 'Aceite de ricino'),
-    (3005, 'Farmacia y Suministros Clínicos S.A.', 'Calle 789, Córdoba', '7890123456', 'contacto@farmacia-clinica.com', 5, 'Ácido ascórbico (vitamina C)');
+    (3001, 'Suministros Farmacéuticos S.A.', 'Calle 123, Zárate', '1234567890', 'suministros@farmaceuticos.com', 1),
+    (3002, 'Materias Primas Industriales Ltda.', 'Avenida XYZ, Pilar', '9876543210', 'info@materiasprimas-industriales.com', 2),
+    (3003, 'Distribuidora de Químicos y Suministros Médicos S.A.', 'Calle 456, Rosario', '4567890123', 'contacto@distribuidora-quimicos.com', 3),
+    (3004, 'Proveedoría Médica Internacional S.A.C.', 'Avenida LMN, CABA', '3219876540', 'ventas@proveedoria-medica.com', 4),
+    (3005, 'Farmacia y Suministros Clínicos S.A.', 'Calle 789, Córdoba', '7890123456', 'contacto@farmacia-clinica.com', 5);
 
 -- Insertar datos en la tabla "Empleados" con nombres ficticios de empresas en correos electrónicos
 INSERT INTO Empleados (id_emp, nombre_emp, apellido_emp, puesto, correo_elect, telefono)
