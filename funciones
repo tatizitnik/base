@@ -1,0 +1,33 @@
+DELIMITER //
+CREATE FUNCTION CalcularPrecioTotalOrdenCompra(
+    orderId INT -- El ID de la orden de compra de la que se desea calcular el precio total.
+)
+RETURNS DECIMAL(10, 2)
+BEGIN
+    DECLARE total DECIMAL(10, 2);
+
+    -- Calcula el precio total sumando el producto de la cantidad y el precio de cada materia prima en el detalle de la orden.
+    SELECT SUM(D.cantidad * D.precio_mp) INTO total
+    FROM Detalle_OC D
+    WHERE D.id_oc = orderId;
+
+    RETURN total; -- Devuelve el precio total calculado.
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE FUNCTION ObtenerNombreProveedor(
+    orderId INT -- El ID de la orden de compra de la que se desea obtener el nombre del proveedor.
+)
+RETURNS VARCHAR(100)
+BEGIN
+    DECLARE provName VARCHAR(100);
+
+    -- Obtiene el nombre del proveedor basado en el ID de proveedor en la tabla Orden_de_Compra.
+    SELECT P.nombre_prov INTO provName
+    FROM Proveedores P
+    WHERE P.id_prov = (SELECT OC.id_prov FROM Orden_de_Compra OC WHERE OC.id_oc = orderId);
+
+    RETURN provName; -- Devuelve el nombre del proveedor obtenido.
+END //
+DELIMITER ;
