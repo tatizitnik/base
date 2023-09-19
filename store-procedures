@@ -1,0 +1,38 @@
+-- SP para ordenar una tabla
+DELIMITER //
+CREATE PROCEDURE OrdenarTabla(
+    IN tableName VARCHAR(100), -- Nombre de la tabla a ordenar
+    IN orderField VARCHAR(100), -- Campo por el que se ordenará
+    IN sortOrder VARCHAR(4)     -- "ASC" para ascendente o "DESC" para descendente
+)
+BEGIN
+    SET @query = CONCAT('SELECT * FROM ', tableName, ' ORDER BY ', orderField, ' ', sortOrder);
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END //
+DELIMITER ;
+
+-- SP para insertar o eliminar registros en una tabla
+DELIMITER //
+CREATE PROCEDURE InsertarEliminarRegistro(
+    IN tableName VARCHAR(100), -- Nombre de la tabla
+    IN id INT,                -- ID del registro a eliminar (dejar en NULL para insertar)
+    IN nombre VARCHAR(100)    -- Otros campos según la tabla
+)
+BEGIN
+    IF id IS NOT NULL THEN
+        -- Eliminar el registro si se proporciona un ID
+        SET @deleteQuery = CONCAT('DELETE FROM ', tableName, ' WHERE id = ', id);
+        PREPARE deleteStmt FROM @deleteQuery;
+        EXECUTE deleteStmt;
+        DEALLOCATE PREPARE deleteStmt;
+    ELSE
+        -- Insertar el registro si no se proporciona un ID
+        SET @insertQuery = CONCAT('INSERT INTO ', tableName, ' (nombre) VALUES (''', nombre, ''')');
+        PREPARE insertStmt FROM @insertQuery;
+        EXECUTE insertStmt;
+        DEALLOCATE PREPARE insertStmt;
+    END IF;
+END //
+DELIMITER ;
