@@ -1,0 +1,48 @@
+-- Crear tabla de LOG para la tabla Materias_Primas
+CREATE TABLE IF NOT EXISTS Log_Materias_Primas (
+    log_id INT PRIMARY KEY AUTO_INCREMENT,
+    tabla_afectada VARCHAR(100),
+    accion_realizada VARCHAR(100),
+    usuario VARCHAR(50),
+    fecha DATE,
+    hora TIME
+);
+
+-- Crear tabla de LOG para la tabla Medicamentos
+CREATE TABLE IF NOT EXISTS Log_Medicamentos (
+    log_id INT PRIMARY KEY AUTO_INCREMENT,
+    tabla_afectada VARCHAR(100),
+    accion_realizada VARCHAR(100),
+    usuario VARCHAR(50),
+    fecha DATE,
+    hora TIME
+);
+
+DELIMITER //
+CREATE TRIGGER Before_Materias_Primas_Update
+BEFORE UPDATE ON Materias_Primas
+FOR EACH ROW
+BEGIN
+    -- Explicación: Este trigger se dispara antes de realizar una actualización (UPDATE) en la tabla Materias_Primas.
+    -- Registra en la tabla de LOG Log_Materias_Primas detalles sobre la acción realizada, como la tabla afectada, la acción,
+    -- el usuario que realiza la acción, la fecha y la hora actuales.
+    INSERT INTO Log_Materias_Primas (tabla_afectada, accion_realizada, usuario, fecha, hora)
+    VALUES ('Materias_Primas', 'UPDATE', USER(), CURDATE(), CURTIME());
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER After_Medicamentos_Insert
+AFTER INSERT ON Medicamentos
+FOR EACH ROW
+BEGIN
+    -- Explicación: Este trigger se dispara después de realizar una inserción (INSERT) en la tabla Medicamentos.
+    -- Registra en la tabla de LOG Log_Medicamentos detalles sobre la acción realizada, como la tabla afectada, la acción,
+    -- el usuario que realiza la acción, la fecha y la hora actuales.
+    INSERT INTO Log_Medicamentos (tabla_afectada, accion_realizada, usuario, fecha, hora)
+    VALUES ('Medicamentos', 'INSERT', USER(), CURDATE(), CURTIME());
+END;
+//
+DELIMITER ;
+
