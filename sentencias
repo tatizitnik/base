@@ -1,0 +1,16 @@
+-- Crear el primer usuario con permisos de solo lectura
+CREATE USER 'usuario_lectura'@'localhost' IDENTIFIED BY 'contraseña_lectura';
+-- Asignar permisos de solo lectura a todas las tablas en la base de datos 'MiBaseDeDatos'
+GRANT SELECT ON MiBaseDeDatos.* TO 'usuario_lectura'@'localhost';
+
+-- Crear el segundo usuario con permisos de lectura, inserción y modificación de datos
+CREATE USER 'usuario_modificacion'@'localhost' IDENTIFIED BY 'contraseña_modificacion';
+-- Asignar permisos de lectura, inserción y modificación de datos a todas las tablas en la base de datos 'MiBaseDeDatos'
+GRANT SELECT, INSERT, UPDATE ON MiBaseDeDatos.* TO 'usuario_modificacion'@'localhost';
+
+-- No permitir que ninguno de los usuarios elimine registros de ninguna tabla
+-- Esto se logra otorgando permisos SELECT, INSERT y UPDATE, pero no permisos DELETE
+
+-- Por seguridad, revocar todos los permisos que los usuarios puedan haber heredado previamente
+REVOKE ALL PRIVILEGES ON *.* FROM 'usuario_lectura'@'localhost';
+REVOKE ALL PRIVILEGES ON *.* FROM 'usuario_modificacion'@'localhost';
