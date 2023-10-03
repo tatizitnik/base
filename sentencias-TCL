@@ -18,20 +18,20 @@ START TRANSACTION;
 
 -- Insertar ocho nuevos registros en la tabla Lotes
 INSERT INTO Lotes (id_med, nombre_med, fecha_ven, unidades) VALUES
-    (1, 'Lote 1', '2023-12-31', 100),
-    (2, 'Lote 2', '2023-11-30', 50),
-    (3, 'Lote 3', '2023-10-31', 75),
-    (4, 'Lote 4', '2023-09-30', 60);
+    (20151, 'Amoxicilina', '2023-12-31', 100),
+    (20152, 'Warfarina', '2023-11-30', 50),
+    (20153, 'Metoprolol', '2023-10-31', 75),
+    (20154, 'Insulina lispro', '2023-09-30', 60);
 
 -- Agregar un savepoint después de la inserción del registro #4
 SAVEPOINT savepoint_1;
 
 -- Continuar con la inserción de registros restantes en la tabla Lotes
 INSERT INTO Lotes (id_med, nombre_med, fecha_ven, unidades) VALUES
-    (5, 'Lote 5', '2023-08-31', 90),
-    (6, 'Lote 6', '2023-07-31', 110),
-    (7, 'Lote 7', '2023-06-30', 30),
-    (8, 'Lote 8', '2023-05-31', 40);
+    (20155, 'Risperidona', '2023-08-31', 700),
+    (20156, 'Diclofenaco', '2023-07-31', 400),
+    (20157, 'Pantoprazol', '2023-06-30', 300),
+    (20158, 'Venlafaxina', '2023-05-31', 500);
 
 -- Agregar un savepoint después de la inserción del registro #8
 SAVEPOINT savepoint_2;
