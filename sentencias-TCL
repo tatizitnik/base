@@ -1,0 +1,43 @@
+-- Iniciar una transacción en la tabla Medicamentos
+START TRANSACTION;
+
+-- Verificar si la tabla Medicamentos tiene registros
+SELECT COUNT(*) FROM Medicamentos;
+
+-- Si hay registros en la tabla Medicamentos, eliminar algunos (comentar para evitar la eliminación)
+-- DELETE FROM Medicamentos WHERE <condición>;
+
+-- En caso de eliminación accidental, se puede usar ROLLBACK para deshacer la transacción
+-- ROLLBACK;
+
+-- En caso de éxito, confirmar los cambios en la transacción de la tabla Medicamentos
+-- COMMIT;
+
+-- Iniciar una nueva transacción en la tabla Lotes
+START TRANSACTION;
+
+-- Insertar ocho nuevos registros en la tabla Lotes
+INSERT INTO Lotes (id_med, nombre_med, fecha_ven, unidades) VALUES
+    (1, 'Lote 1', '2023-12-31', 100),
+    (2, 'Lote 2', '2023-11-30', 50),
+    (3, 'Lote 3', '2023-10-31', 75),
+    (4, 'Lote 4', '2023-09-30', 60);
+
+-- Agregar un savepoint después de la inserción del registro #4
+SAVEPOINT savepoint_1;
+
+-- Continuar con la inserción de registros restantes en la tabla Lotes
+INSERT INTO Lotes (id_med, nombre_med, fecha_ven, unidades) VALUES
+    (5, 'Lote 5', '2023-08-31', 90),
+    (6, 'Lote 6', '2023-07-31', 110),
+    (7, 'Lote 7', '2023-06-30', 30),
+    (8, 'Lote 8', '2023-05-31', 40);
+
+-- Agregar un savepoint después de la inserción del registro #8
+SAVEPOINT savepoint_2;
+
+-- En caso de necesidad, eliminar el savepoint de los primeros 4 registros insertados
+-- ROLLBACK TO SAVEPOINT savepoint_1;
+
+-- Confirmar los cambios en la transacción de la tabla Lotes
+-- COMMIT;
