@@ -1,0 +1,664 @@
+-- Crear la base de datos
+CREATE DATABASE IF NOT EXISTS MiBaseDeDatos;
+
+-- Usar la base de datos creada
+USE MiBaseDeDatos;
+
+-- Crear tabla de Materias Primas
+CREATE TABLE IF NOT EXISTS Materias_Primas (
+    id_mp INT PRIMARY KEY,
+    nombre_mp VARCHAR(100)
+);
+
+-- Crear tabla de Medicamentos
+CREATE TABLE IF NOT EXISTS Medicamentos (
+    id_med INT PRIMARY KEY,
+    nombre_med VARCHAR(100),
+    precio_med DECIMAL(10, 2),
+    id_mp INT,
+    FOREIGN KEY (id_mp) REFERENCES Materias_Primas(id_mp)
+);
+
+-- Crear la tabla "Relacion"
+CREATE TABLE IF NOT EXISTS Relacion (
+    id_relacion INT PRIMARY KEY,
+    id_med INT,
+    id_mp INT,
+    cantidad_necesaria INT,
+    FOREIGN KEY (id_med) REFERENCES Medicamentos(id_med),
+    FOREIGN KEY (id_mp) REFERENCES MateriasPrimas(id_mp)
+);
+
+-- Crear tabla de Lotes
+CREATE TABLE IF NOT EXISTS Lotes (
+    id_lote INT PRIMARY KEY,
+    id_med INT,
+    nombre_med VARCHAR(100),
+    fecha_ven DATE,
+    unidades INT,
+    FOREIGN KEY (id_med) REFERENCES Medicamentos(id_med)
+);
+
+-- Crear tabla de Proveedores
+CREATE TABLE IF NOT EXISTS Proveedores (
+    id_prov INT PRIMARY KEY,
+    nombre_prov VARCHAR(100),
+    direccion VARCHAR(200),
+    telefono VARCHAR(20),
+    correo_elect VARCHAR(100),
+    id_mp INT,
+    FOREIGN KEY (id_mp) REFERENCES Materias_Primas(id_mp)
+);
+
+-- Crear tabla de Empleados
+CREATE TABLE IF NOT EXISTS Empleados (
+    id_emp INT PRIMARY KEY,
+    nombre_emp VARCHAR(50),
+    apellido_emp VARCHAR(50),
+    puesto VARCHAR(50),
+    correo_elect VARCHAR(100),
+    telefono VARCHAR(20)
+);
+
+-- Crear tabla de Orden de Compra
+CREATE TABLE IF NOT EXISTS Orden_de_Compra (
+    id_oc INT PRIMARY KEY,
+    fecha_oc DATE,
+    costo_total DECIMAL(10, 2),
+    id_prov INT,
+    id_emp INT,
+    FOREIGN KEY (id_prov) REFERENCES Proveedores(id_prov),
+    FOREIGN KEY (id_emp) REFERENCES Empleados(id_emp)
+);
+
+-- Crear tabla de Detalle de la OC
+CREATE TABLE IF NOT EXISTS Detalle_OC (
+    id_detalle_oc INT PRIMARY KEY,
+    cantidad INT,
+    precio_mp DECIMAL(10, 2),
+    total_unid INT,
+    id_mp INT,
+    id_oc INT,
+    FOREIGN KEY (id_mp) REFERENCES Materias_Primas(id_mp),
+    FOREIGN KEY (id_oc) REFERENCES Orden_de_Compra(id_oc)
+);
+
+-- Insertar datos en la tabla "Materias_Primas"
+INSERT INTO Materias_Primas (id_mp, nombre_mp)
+VALUES
+    (1, 'Agua destilada'),
+    (2, 'Alcohol etílico'),
+    (3, 'Azúcar'),
+    (4, 'Aceite de ricino'),
+    (5, 'Ácido ascórbico (vitamina C)'),
+    (6, 'Ácido acetilsalicílico'),
+    (7, 'Lactosa'),
+    (8, 'Estearato de magnesio'),
+    (9, 'Paracetamol'),
+    (10, 'Glicerina'),
+    (11, 'Hidroxipropil metilcelulosa (HPMC)'),
+    (12, 'Propilenglicol'),
+    (13, 'Sorbitol'),
+    (14, 'Vaselina'),
+    (15, 'Hidrocortisona'),
+    (16, 'Talco'),
+    (17, 'Lanolina'),
+    (18, 'Cloruro de sodio (sal)'),
+    (19, 'Etilenglicol'),
+    (20, 'Polietilenglicol (PEG)'),
+    (21, 'Metilparabeno y propilparabeno'),
+    (22, 'Propilparabeno');
+
+-- Insertar datos en la tabla "Medicamentos"
+INSERT INTO Medicamentos (id_med, nombre_med, precio_med)
+VALUES
+    (101, 'Paracetamol', 5.99),
+    (102, 'Ibuprofeno', 7.49),
+    (103, 'Aspirina', 4.99),
+    (104, 'Omeprazol', 9.99),
+    (105, 'Amoxicilina', 12.99),
+    (106, 'Loratadina', 6.79),
+    (107, 'Simvastatina', 15.29),
+    (108, 'Metformina', 8.99),
+    (109, 'Losartán', 11.49),
+    (110, 'Atorvastatina', 13.99),
+    (111, 'Enalapril', 7.59),
+    (112, 'Hidroclorotiazida', 6.89),
+    (113, 'Metoprolol', 8.79),
+    (114, 'Amlodipino', 9.29),
+    (115, 'Escitalopram', 10.99),
+    (116, 'Sertralina', 11.79),
+    (117, 'Warfarina', 7.99),
+    (118, 'Tramadol', 14.49),
+    (119, 'Cetirizina', 6.29),
+    (120, 'Ranitidina', 5.49),
+    (121, 'Pantoprazol', 8.89),
+    (122, 'Gabapentina', 12.99),
+    (123, 'Pregabalina', 15.49),
+    (124, 'Insulina glargina', 25.99),
+    (125, 'Insulina lispro', 27.49),
+    (126, 'Levotiroxina', 7.99),
+    (127, 'Levetiracetam', 9.79),
+    (128, 'Azitromicina', 14.99),
+    (129, 'Ciprofloxacino', 8.69),
+    (130, 'Doxiciclina', 7.39),
+    (131, 'Prednisona', 6.49),
+    (132, 'Celecoxib', 11.99),
+    (133, 'Metoclopramida', 5.89),
+    (134, 'Ondansetrón', 9.29),
+    (135, 'Risperidona', 8.99),
+    (136, 'Alprazolam', 7.79),
+    (137, 'Diazepam', 6.69),
+    (138, 'Clonazepam', 9.49),
+    (139, 'Lisinopril', 5.99),
+    (140, 'Furosemida', 6.19),
+    (141, 'Acetaminofén', 4.49),
+    (142, 'Valsartán', 11.29),
+    (143, 'Montelukast', 9.89),
+    (144, 'Loperamida', 5.69),
+    (145, 'Diclofenaco', 6.99),
+    (146, 'Beclometasona', 12.49),
+    (147, 'Fenitoína', 8.59),
+    (148, 'Carbamazepina', 7.29),
+    (149, 'Amitriptilina', 9.79),
+    (150, 'Venlafaxina', 8.99);
+
+-- Insertar datos en la tabla "Relacion" que relaciona materias primas y medicamentos
+INSERT INTO Relacion (id_relacion, id_med, id_mp, cantidad_necesaria)
+VALUES
+    (1, 101, 11, 241),    -- Medicamento 1 necesita 241 gramos de Materia Prima 11
+    (2, 101, 18, 92),     -- Medicamento 1 necesita 92 gramos de Materia Prima 18
+    (3, 102, 6, 484),     -- Medicamento 2 necesita 6 gramos de Materia Prima 6
+    (4, 102, 12, 296),
+    (5, 103, 7, 332),
+    (6, 103, 13, 852),
+    (7, 104, 5, 655),
+    (8, 104, 21, 754),
+    (9, 105, 2, 565),
+    (10, 105, 17, 13),
+    (11, 105, 22, 896),
+    (12, 106, 2, 197),
+    (13, 106, 9, 305),
+    (14, 106, 14, 363),
+    (15, 106, 16, 980),
+    (16, 107, 6, 762),
+    (17, 107, 14, 35),
+    (18, 107, 17, 494),
+    (19, 107, 19, 649),
+    (20, 108, 8, 532),
+    (21, 108, 10, 400),
+    (22, 108, 14, 24),
+    (23, 108, 21, 459),
+    (24, 109, 1, 164),
+    (25, 109, 11, 60),
+    (26, 109, 22, 885),
+    (27, 110, 11, 167),
+    (28, 110, 13, 517),
+    (29, 111, 2, 203),
+    (30, 111, 4, 935),
+    (31, 111, 10, 234),
+    (32, 111, 11, 624),
+    (33, 112, 3, 743),
+    (34, 112, 14, 961),
+    (35, 112, 18, 458),
+    (36, 112, 21, 534),
+    (37, 113, 9, 437),
+    (38, 113, 12, 868),
+    (39, 114, 4, 51),
+    (40, 114, 12, 137),
+    (41, 115, 10, 709),
+    (42, 115, 14, 972),
+    (43, 115, 18, 674),
+    (44, 115, 21, 306),
+    (45, 116, 4, 710),
+    (46, 116, 7, 107),
+    (47, 117, 6, 225),
+    (48, 117, 18, 979),
+    (49, 118, 1, 617),
+    (50, 118, 3, 57),
+    (51, 118, 11, 870),
+    (52, 119, 1, 40),
+    (53, 119, 15, 915),
+    (54, 120, 1, 183),
+    (55, 120, 3, 464),
+    (56, 120, 11, 543),
+    (57, 120, 16, 404),
+    (58, 120, 22, 21),
+    (59, 121, 3, 124),
+    (60, 121, 7, 323),
+    (61, 121, 14, 40),
+    (62, 122, 7, 341),
+    (63, 122, 9, 836),
+    (64, 122, 10, 979),
+    (65, 122, 11, 668),
+    (66, 123, 3, 677),
+    (67, 123, 13, 749),
+    (68, 123, 14, 758),
+    (69, 123, 15, 796),
+    (70, 124, 7, 651),
+    (71, 124, 9, 672),
+    (72, 124, 22, 489),
+    (73, 125, 10, 142),
+    (74, 125, 17, 176),
+    (75, 125, 20, 558),
+    (76, 126, 7, 456),
+    (77, 126, 13, 227),
+    (78, 126, 16, 76),
+    (79, 127, 7, 547),
+    (80, 127, 9, 549),
+    (81, 128, 3, 60),
+    (82, 128, 21, 736),
+    (83, 129, 1, 276),
+    (84, 129, 13, 571),
+    (85, 129, 15, 211),
+    (86, 130, 10, 904),
+    (87, 130, 18, 753),
+    (88, 130, 20, 830),
+    (89, 131, 3, 700),
+    (90, 131, 12, 799),
+    (91, 131, 13, 694),
+    (92, 132, 8, 207),
+    (93, 132, 15, 373),
+    (94, 132, 16, 526),
+    (95, 132, 17, 47),
+    (96, 133, 1, 176),
+    (97, 133, 4, 758),
+    (98, 133, 15, 968),
+    (99, 134, 5, 250),
+    (100, 134, 10, 112),
+    (101, 134, 16, 735),
+    (102, 134, 17, 604),
+    (103, 135, 7, 794),
+    (104, 135, 8, 572),
+    (105, 135, 11, 78),
+    (106, 135, 15, 17),
+    (107, 136, 14, 837),
+    (108, 136, 17, 963),
+    (109, 136, 20, 667),
+    (110, 137, 1, 272),
+    (111, 137, 12, 326),
+    (112, 137, 18, 878),
+    (113, 138, 3, 79),
+    (114, 138, 7, 822),
+    (115, 138, 20, 935),
+    (116, 139, 10, 904),
+    (117, 139, 16, 963),
+    (118, 140, 13, 342),
+    (119, 140, 17, 833),
+    (120, 141, 3, 323),
+    (121, 141, 5, 787),
+    (122, 141, 6, 680),
+    (123, 141, 7, 943),
+    (124, 141, 19, 334),
+    (125, 142, 18, 575),
+    (126, 143, 5, 865),
+    (127, 143, 6, 318),
+    (128, 143, 7, 874),
+    (129, 143, 17, 366),
+    (130, 144, 5, 966),
+    (131, 144, 9, 217),
+    (132, 144, 12, 599),
+    (133, 144, 17, 196),
+    (134, 144, 19, 39),
+    (135, 145, 7, 433),
+    (136, 145, 19, 630),
+    (137, 145, 22, 310),
+    (138, 146, 1, 832),
+    (139, 146, 2, 168),
+    (140, 146, 9, 734),
+    (141, 146, 12, 885),
+    (142, 147, 8, 592),
+    (143, 147, 13, 399),
+    (144, 148, 3, 974),
+    (145, 148, 10, 45),
+    (146, 149, 6, 352),
+    (147, 149, 12, 671),
+    (148, 149, 21, 104),
+    (149, 150, 12, 918),
+    (150, 150, 19, 882);
+
+-- Insertar datos en la tabla "Lotes"
+INSERT INTO Lotes (id_lote, id_med, nombre_med, fecha_ven, unidades)
+VALUES   
+    (20001, 101, 'Paracetamol', ' 2023-05-08', 500),
+    (20002, 101, 'Paracetamol', ' 2023-03-11', 200),
+    (20003, 102, 'Ibuprofeno', ' 2023-03-04', 700),
+    (20004, 102, 'Ibuprofeno', ' 2023-12-15', 400),
+    (20005, 102, 'Ibuprofeno', ' 2023-02-01', 400),
+    (20006, 103, 'Aspirina', ' 2023-08-27', 500),
+    (20007, 103, 'Aspirina', ' 2023-01-28', 200),
+    (20008, 105, 'Amoxicilina', ' 2023-08-26', 200),
+    (20009, 105, 'Amoxicilina', ' 2023-09-11', 500),
+    (20010, 105, 'Amoxicilina', ' 2023-02-13', 100),
+    (20011, 106, 'Loratadina', ' 2023-02-13', 600),
+    (20012, 106, 'Loratadina', ' 2023-04-10', 600),
+    (20013, 106, 'Loratadina', ' 2023-06-04', 300),
+    (20014, 106, 'Loratadina', ' 2023-12-09', 100),
+    (20015, 107, 'Simvastatina', ' 2023-11-21', 300),
+    (20016, 107, 'Simvastatina', ' 2023-11-17', 400),
+    (20017, 107, 'Simvastatina', ' 2023-07-04', 200),
+    (20018, 108, 'Metformina', ' 2023-04-21', 300),
+    (20019, 108, 'Metformina', ' 2023-01-01', 300),
+    (20020, 108, 'Metformina', ' 2023-08-25', 600),
+    (20021, 109, 'Losartán', ' 2023-09-03', 400),
+    (20022, 109, 'Losartán', ' 2023-12-02', 100),
+    (20023, 109, 'Losartán', ' 2023-05-06', 400),
+    (20024, 109, 'Losartán', ' 2023-05-10', 100),
+    (20025, 110, 'Atorvastatina', ' 2023-01-10', 500),
+    (20026, 110, 'Atorvastatina', ' 2023-12-03', 800),
+    (20027, 111, 'Enalapril', ' 2023-01-06', 300),
+    (20028, 111, 'Enalapril', ' 2023-08-03', 800),
+    (20029, 112, 'Hidroclorotiazida', ' 2023-04-03', 800),
+    (20030, 113, 'Metoprolol', ' 2023-01-03', 100),
+    (20031, 114, 'Amlodipino', ' 2023-06-21', 400),
+    (20032, 115, 'Escitalopram', ' 2023-08-08', 100),
+    (20033, 115, 'Escitalopram', ' 2023-05-05', 400),
+    (20034, 115, 'Escitalopram', ' 2023-08-27', 200),
+    (20035, 115, 'Escitalopram', ' 2023-02-19', 400),
+    (20036, 115, 'Escitalopram', ' 2023-05-12', 500),
+    (20037, 116, 'Sertralina', ' 2023-05-17', 700),
+    (20038, 116, 'Sertralina', ' 2023-05-29', 600),
+    (20039, 116, 'Sertralina', ' 2023-10-26', 400),
+    (20040, 116, 'Sertralina', ' 2023-02-26', 600),
+    (20041, 116, 'Sertralina', ' 2023-08-24', 800),
+    (20042, 117, 'Warfarina', ' 2023-11-05', 700),
+    (20043, 117, 'Warfarina', ' 2023-05-15', 100),
+    (20044, 117, 'Warfarina', ' 2023-02-20', 300),
+    (20045, 117, 'Warfarina', ' 2023-05-29', 500),
+    (20046, 118, 'Tramadol', ' 2023-09-27', 500),
+    (20047, 118, 'Tramadol', ' 2023-07-13', 200),
+    (20048, 118, 'Tramadol', ' 2023-10-09', 300),
+    (20049, 118, 'Tramadol', ' 2023-06-04', 800),
+    (20050, 119, 'Cetirizina', ' 2023-04-28', 800),
+    (20051, 119, 'Cetirizina', ' 2023-12-11', 800),
+    (20052, 119, 'Cetirizina', ' 2023-10-17', 500),
+    (20053, 119, 'Cetirizina', ' 2023-06-15', 300),
+    (20054, 120, 'Ranitidina', ' 2023-03-23', 800),
+    (20055, 120, 'Ranitidina', ' 2023-06-19', 700),
+    (20056, 121, 'Pantoprazol', ' 2023-10-28', 300),
+    (20057, 121, 'Pantoprazol', ' 2023-02-14', 200),
+    (20058, 121, 'Pantoprazol', ' 2023-02-18', 400),
+    (20059, 123, 'Pregabalina', ' 2023-03-08', 500),
+    (20060, 124, 'Insulina glargina', ' 2023-10-06', 700),
+    (20061, 124, 'Insulina glargina', ' 2023-01-02', 800),
+    (20062, 124, 'Insulina glargina', ' 2023-11-06', 100),
+    (20063, 125, 'Insulina lispro', ' 2023-08-01', 200),
+    (20064, 125, 'Insulina lispro', ' 2023-11-08', 300),
+    (20065, 125, 'Insulina lispro', ' 2023-02-11', 700),
+    (20066, 126, 'Levotiroxina', ' 2023-07-25', 600),
+    (20067, 126, 'Levotiroxina', ' 2023-08-30', 200),
+    (20068, 126, 'Levotiroxina', ' 2023-01-29', 300),
+    (20069, 126, 'Levotiroxina', ' 2023-05-12', 200),
+    (20070, 127, 'Levetiracetam', ' 2023-07-25', 200),
+    (20071, 127, 'Levetiracetam', ' 2023-02-03', 500),
+    (20072, 128, 'Azitromicina', ' 2023-06-20', 100),
+    (20073, 128, 'Azitromicina', ' 2023-09-13', 500),
+    (20074, 128, 'Azitromicina', ' 2023-12-16', 200),
+    (20075, 128, 'Azitromicina', ' 2023-11-06', 800),
+    (20076, 129, 'Ciprofloxacino', ' 2023-03-18', 200),
+    (20077, 129, 'Ciprofloxacino', ' 2023-12-12', 500),
+    (20078, 129, 'Ciprofloxacino', ' 2023-12-09', 100),
+    (20079, 129, 'Ciprofloxacino', ' 2023-10-17', 500),
+    (20080, 129, 'Ciprofloxacino', ' 2023-04-29', 500),
+    (20081, 129, 'Ciprofloxacino', ' 2023-12-29', 600),
+    (20082, 129, 'Ciprofloxacino', ' 2023-09-20', 600),
+    (20083, 129, 'Ciprofloxacino', ' 2023-04-13', 100),
+    (20084, 129, 'Ciprofloxacino', ' 2023-12-04', 800),
+    (20085, 129, 'Ciprofloxacino', ' 2023-11-03', 300),
+    (20086, 130, 'Doxiciclina', ' 2023-06-01', 600),
+    (20087, 130, 'Doxiciclina', ' 2023-12-27', 600),
+    (20088, 130, 'Doxiciclina', ' 2023-09-26', 800),
+    (20089, 130, 'Doxiciclina', ' 2023-06-01', 700),
+    (20090, 131, 'Prednisona', ' 2023-03-16', 700),
+    (20091, 131, 'Prednisona', ' 2023-05-12', 100),
+    (20092, 131, 'Prednisona', ' 2023-02-05', 500),
+    (20093, 131, 'Prednisona', ' 2023-11-01', 700),
+    (20094, 132, 'Celecoxib', ' 2023-10-06', 200),
+    (20095, 132, 'Celecoxib', ' 2023-04-28', 700),
+    (20096, 132, 'Celecoxib', ' 2023-07-02', 100),
+    (20097, 133, 'Metoclopramida', ' 2023-11-22', 800),
+    (20098, 133, 'Metoclopramida', ' 2023-04-13', 600),
+    (20099, 133, 'Metoclopramida', ' 2023-11-03', 500),
+    (20100, 135, 'Risperidona', ' 2023-06-15', 400),
+    (20101, 135, 'Risperidona', ' 2023-12-17', 300),
+    (20102, 135, 'Risperidona', ' 2023-04-01', 600),
+    (20103, 136, 'Alprazolam', ' 2023-02-12', 800),
+    (20104, 136, 'Alprazolam', ' 2023-07-22', 700),
+    (20105, 137, 'Diazepam', ' 2023-11-07', 700),
+    (20106, 137, 'Diazepam', ' 2023-04-07', 100),
+    (20107, 137, 'Diazepam', ' 2023-10-12', 100),
+    (20108, 137, 'Diazepam', ' 2023-02-11', 200),
+    (20109, 137, 'Diazepam', ' 2023-09-23', 500),
+    (20110, 137, 'Diazepam', ' 2023-02-20', 200),
+    (20111, 137, 'Diazepam', ' 2023-06-21', 300),
+    (20112, 138, 'Clonazepam', ' 2023-06-11', 800),
+    (20113, 138, 'Clonazepam', ' 2023-02-08', 800),
+    (20114, 138, 'Clonazepam', ' 2023-12-19', 500),
+    (20115, 139, 'Lisinopril', ' 2023-01-15', 700),
+    (20116, 139, 'Lisinopril', ' 2023-11-13', 800),
+    (20117, 139, 'Lisinopril', ' 2023-08-23', 300),
+    (20118, 140, 'Furosemida', ' 2023-12-24', 400),
+    (20119, 140, 'Furosemida', ' 2023-01-27', 200),
+    (20120, 140, 'Furosemida', ' 2023-10-14', 200),
+    (20121, 140, 'Furosemida', ' 2023-04-21', 200),
+    (20122, 141, 'Acetaminofén', ' 2023-03-21', 400),
+    (20123, 141, 'Acetaminofén', ' 2023-03-29', 100),
+    (20124, 142, 'Valsartán', ' 2023-06-14', 800),
+    (20125, 142, 'Valsartán', ' 2023-12-23', 200),
+    (20126, 143, 'Montelukast', ' 2023-04-22', 100),
+    (20127, 143, 'Montelukast', ' 2023-11-27', 500),
+    (20128, 143, 'Montelukast', ' 2023-02-06', 400),
+    (20129, 143, 'Montelukast', ' 2023-02-02', 700),
+    (20130, 144, 'Loperamida', ' 2023-04-21', 200),
+    (20131, 145, 'Diclofenaco', ' 2023-08-18', 100),
+    (20132, 146, 'Beclometasona', ' 2023-12-29', 500),
+    (20133, 146, 'Beclometasona', ' 2023-09-05', 800),
+    (20134, 146, 'Beclometasona', ' 2023-03-22', 400),
+    (20135, 146, 'Beclometasona', ' 2023-04-17', 600),
+    (20136, 146, 'Beclometasona', ' 2023-11-07', 100),
+    (20137, 147, 'Fenitoína', ' 2023-12-27', 400),
+    (20138, 147, 'Fenitoína', ' 2023-10-09', 800),
+    (20139, 147, 'Fenitoína', ' 2023-07-27', 500),
+    (20140, 148, 'Carbamazepina', ' 2023-10-21', 200),
+    (20141, 148, 'Carbamazepina', ' 2023-05-12', 100),
+    (20142, 148, 'Carbamazepina', ' 2023-02-25', 400),
+    (20143, 149, 'Amitriptilina', ' 2023-12-29', 200),
+    (20144, 149, 'Amitriptilina', ' 2023-07-30', 700),
+    (20145, 149, 'Amitriptilina', ' 2023-04-26', 400),
+    (20146, 149, 'Amitriptilina', ' 2023-07-02', 200),
+    (20147, 149, 'Amitriptilina', ' 2023-06-17', 300),
+    (20148, 149, 'Amitriptilina', ' 2023-04-15', 300),
+    (20149, 149, 'Amitriptilina', ' 2023-08-19', 400),
+    (20150, 149, 'Amitriptilina', ' 2023-05-10', 700);
+
+-- Insertar datos en la tabla "Proveedores"
+INSERT INTO Proveedores (id_prov, nombre_prov, direccion, telefono, correo_elect, id_mp)
+VALUES
+    (3001, 'Suministros Farmacéuticos S.A.', 'Calle 123, Zárate', '1234567890', 'suministros@farmaceuticos.com', 1),
+    (3002, 'Materias Primas Industriales Ltda.', 'Avenida XYZ, Pilar', '9876543210', 'info@materiasprimas-industriales.com', 2),
+    (3003, 'Distribuidora de Químicos y Suministros Médicos S.A.', 'Calle 456, Rosario', '4567890123', 'contacto@distribuidora-quimicos.com', 3),
+    (3004, 'Proveedoría Médica Internacional S.A.C.', 'Avenida LMN, CABA', '3219876540', 'ventas@proveedoria-medica.com', 4),
+    (3005, 'Farmacia y Suministros Clínicos S.A.', 'Calle 789, Córdoba', '7890123456', 'contacto@farmacia-clinica.com', 5);
+
+-- Insertar datos en la tabla "Empleados" con nombres ficticios de empresas en correos electrónicos
+INSERT INTO Empleados (id_emp, nombre_emp, apellido_emp, puesto, correo_elect, telefono)
+VALUES
+    (4001, 'Juan', 'Pérez', 'Farmacéutico', 'juan.perez@biofarmalab.com', '1234567890'),
+    (4002, 'María', 'González', 'Técnico de Laboratorio', 'maria.gonzalez@biofarmalab.com', '9876543210'),
+    (4003, 'Carlos', 'Martínez', 'Gerente de Compras', 'carlos.martinez@biofarmalab.com', '4567890123'),
+    (4004, 'Ana', 'López', 'Asistente Administrativo', 'ana.lopez@biofarmalab.com', '3219876540'),
+    (4005, 'Pedro', 'Ramírez', 'Técnico de Control de Calidad', 'pedro.ramirez@biofarmalab.com', '7890123456');
+
+-- Insertar datos en la tabla "Orden_de_Compra"
+INSERT INTO Orden_de_Compra (id_oc, fecha_oc, costo_total, id_prov, id_emp)
+VALUES
+    (50001, '2023-07-20', 2500.00, 3001, 4001),
+    (50002, '2023-07-21', 1800.00, 3002, 4002),
+    (50003, '2023-07-22', 3200.00, 3003, 4003),
+    (50004, '2023-07-23', 1400.00, 3004, 4004),
+    (50005, '2023-07-24', 1950.00, 3005, 4005);
+
+-- Insertar datos en la tabla "Detalle_OC"
+INSERT INTO Detalle_OC (id_detalle_oc, cantidad, precio_mp, total_unid, id_mp, id_oc)
+VALUES
+    (60001, 50, 5.00, 250, 1, 50001),
+    (60002, 40, 4.50, 180, 2, 50001),
+    (60003, 30, 6.00, 180, 2, 50002),
+    (60004, 20, 3.50, 70, 3, 50002),
+    (60005, 15, 4.00, 60, 4, 50003),
+    (60006, 25, 3.80, 95, 5, 50003),
+    (60007, 10, 7.00, 70, 7, 50004),
+    (60008, 18, 4.20, 75, 6, 50004),
+    (60009, 22, 5.10, 112, 8, 50005),
+    (600010, 30, 6.20, 186, 9, 50005);
+
+-- Crear Vista Detalles de Compras
+CREATE VIEW VistaDetallesCompras AS
+SELECT
+    OC.id_oc,
+    OC.fecha_oc,
+    P.nombre_prov AS proveedor,
+    E.nombre_emp AS empleado,
+    MP.nombre_mp AS materia_prima,
+    D.cantidad,
+    D.precio_mp
+FROM
+    Orden_de_Compra OC
+JOIN
+    Proveedores P ON OC.id_prov = P.id_prov
+JOIN
+    Empleados E ON OC.id_emp = E.id_emp
+JOIN
+    Detalle_OC D ON OC.id_oc = D.id_oc
+JOIN
+    Materias_Primas MP ON D.id_mp = MP.id_mp;
+
+-- Crear Vista Medicamentos con Materias Primas
+CREATE VIEW VistaMedicamentosConMateriasPrimas AS
+SELECT
+    M.id_med,
+    M.nombre_med,
+    MP.nombre_mp AS materia_prima,
+    R.cantidad_necesaria
+FROM
+    Medicamentos M
+JOIN
+    Relacion R ON M.id_med = R.id_med
+JOIN
+    Materias_Primas MP ON R.id_mp = MP.id_mp;
+
+-- Crear Vista Inventario con Lote
+CREATE VIEW VistaInventarioConLotes AS
+SELECT
+    M.id_med,
+    M.nombre_med,
+    M.precio_med,
+    MP.nombre_mp,
+    L.fecha_ven,
+    L.unidades
+FROM
+    Medicamentos M
+JOIN
+    Materias_Primas MP ON M.id_mp = MP.id_mp
+LEFT JOIN
+    Lotes L ON M.id_med = L.id_med;
+
+-- Crear Vista Compras por Proveedor
+CREATE VIEW VistaComprasPorProveedor AS
+SELECT
+    P.nombre_prov AS proveedor,
+    SUM(OC.costo_total) AS total_comprado
+FROM
+    Orden_de_Compra OC
+JOIN
+    Proveedores P ON OC.id_prov = P.id_prov
+GROUP BY
+    P.nombre_prov;
+
+-- Crear Vista Empleados con Compras
+CREATE VIEW VistaEmpleadosConCompras AS
+SELECT
+    E.nombre_emp AS empleado,
+    SUM(OC.costo_total) AS total_comprado
+FROM
+    Orden_de_Compra OC
+JOIN
+    Empleados E ON OC.id_emp = E.id_emp
+GROUP BY
+    E.nombre_emp;
+
+-- Crear Función  para calcular el precio total de la orden de compra
+DELIMITER //
+CREATE FUNCTION CalcularPrecioTotalOrdenCompra(
+    orderId INT -- El ID de la orden de compra de la que se desea calcular el precio total.
+)
+RETURNS DECIMAL(10, 2)
+BEGIN
+    DECLARE total DECIMAL(10, 2);
+
+    -- Calcula el precio total sumando el producto de la cantidad y el precio de cada materia prima en el detalle de la orden.
+    SELECT SUM(D.cantidad * D.precio_mp) INTO total
+    FROM Detalle_OC D
+    WHERE D.id_oc = orderId;
+
+    RETURN total; -- Devuelve el precio total calculado.
+END //
+DELIMITER ;
+
+-- Crear Función para obtener nombre del proveedor
+DELIMITER //
+CREATE FUNCTION ObtenerNombreProveedor(
+    orderId INT -- El ID de la orden de compra de la que se desea obtener el nombre del proveedor.
+)
+RETURNS VARCHAR(100)
+BEGIN
+    DECLARE provName VARCHAR(100);
+
+    -- Obtiene el nombre del proveedor basado en el ID de proveedor en la tabla Orden_de_Compra.
+    SELECT P.nombre_prov INTO provName
+    FROM Proveedores P
+    WHERE P.id_prov = (SELECT OC.id_prov FROM Orden_de_Compra OC WHERE OC.id_oc = orderId);
+
+    RETURN provName; -- Devuelve el nombre del proveedor obtenido.
+END //
+DELIMITER ;
+
+-- SP para ordenar una tabla
+DELIMITER //
+CREATE PROCEDURE OrdenarTabla(
+    IN tableName VARCHAR(100), -- Nombre de la tabla a ordenar
+    IN orderField VARCHAR(100), -- Campo por el que se ordenará
+    IN sortOrder VARCHAR(4)     -- "ASC" para ascendente o "DESC" para descendente
+)
+BEGIN
+    SET @query = CONCAT('SELECT * FROM ', tableName, ' ORDER BY ', orderField, ' ', sortOrder);
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END //
+DELIMITER ;
+
+-- SP para insertar o eliminar registros en una tabla
+DELIMITER //
+CREATE PROCEDURE InsertarEliminarRegistro(
+    IN tableName VARCHAR(100), -- Nombre de la tabla
+    IN id INT,                -- ID del registro a eliminar (dejar en NULL para insertar)
+    IN nombre VARCHAR(100)    -- Otros campos según la tabla
+)
+BEGIN
+    IF id IS NOT NULL THEN
+        -- Eliminar el registro si se proporciona un ID
+        SET @deleteQuery = CONCAT('DELETE FROM ', tableName, ' WHERE id = ', id);
+        PREPARE deleteStmt FROM @deleteQuery;
+        EXECUTE deleteStmt;
+        DEALLOCATE PREPARE deleteStmt;
+    ELSE
+        -- Insertar el registro si no se proporciona un ID
+        SET @insertQuery = CONCAT('INSERT INTO ', tableName, ' (nombre) VALUES (''', nombre, ''')');
+        PREPARE insertStmt FROM @insertQuery;
+        EXECUTE insertStmt;
+        DEALLOCATE PREPARE insertStmt;
+    END IF;
+END //
+DELIMITER ;
+
