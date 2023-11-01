@@ -662,3 +662,111 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Crear tabla de LOG para la tabla Materias_Primas
+CREATE TABLE IF NOT EXISTS Log_Materias_Primas (
+    log_id INT PRIMARY KEY AUTO_INCREMENT,
+    tabla_afectada VARCHAR(100),
+    accion_realizada VARCHAR(100),
+    usuario VARCHAR(50),
+    fecha DATE,
+    hora TIME
+);
+
+-- Crear tabla de LOG para la tabla Medicamentos
+CREATE TABLE IF NOT EXISTS Log_Medicamentos (
+    log_id INT PRIMARY KEY AUTO_INCREMENT,
+    tabla_afectada VARCHAR(100),
+    accion_realizada VARCHAR(100),
+    usuario VARCHAR(50),
+    fecha DATE,
+    hora TIME
+);
+
+DELIMITER //
+CREATE TRIGGER Before_Materias_Primas_Update
+BEFORE UPDATE ON Materias_Primas
+FOR EACH ROW
+BEGIN
+    -- Explicación: Este trigger se dispara antes de realizar una actualización (UPDATE) en la tabla Materias_Primas.
+    -- Registra en la tabla de LOG Log_Materias_Primas detalles sobre la acción realizada, como la tabla afectada, la acción,
+    -- el usuario que realiza la acción, la fecha y la hora actuales.
+    INSERT INTO Log_Materias_Primas (tabla_afectada, accion_realizada, usuario, fecha, hora)
+    VALUES ('Materias_Primas', 'UPDATE', USER(), CURDATE(), CURTIME());
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER After_Medicamentos_Insert
+AFTER INSERT ON Medicamentos
+FOR EACH ROW
+BEGIN
+    -- Explicación: Este trigger se dispara después de realizar una inserción (INSERT) en la tabla Medicamentos.
+    -- Registra en la tabla de LOG Log_Medicamentos detalles sobre la acción realizada, como la tabla afectada, la acción,
+    -- el usuario que realiza la acción, la fecha y la hora actuales.
+    INSERT INTO Log_Medicamentos (tabla_afectada, accion_realizada, usuario, fecha, hora)
+    VALUES ('Medicamentos', 'INSERT', USER(), CURDATE(), CURTIME());
+END;
+//
+DELIMITER ;
+
+-- Crear el primer usuario con permisos de solo lectura
+CREATE USER 'usuario_lectura'@'localhost' IDENTIFIED BY 'contraseña_lectura';
+-- Asignar permisos de solo lectura a todas las tablas en la base de datos 'MiBaseDeDatos'
+GRANT SELECT ON MiBaseDeDatos.* TO 'usuario_lectura'@'localhost';
+
+-- Crear el segundo usuario con permisos de lectura, inserción y modificación de datos
+CREATE USER 'usuario_modificacion'@'localhost' IDENTIFIED BY 'contraseña_modificacion';
+-- Asignar permisos de lectura, inserción y modificación de datos a todas las tablas en la base de datos 'MiBaseDeDatos'
+GRANT SELECT, INSERT, UPDATE ON MiBaseDeDatos.* TO 'usuario_modificacion'@'localhost';
+
+-- No permitir que ninguno de los usuarios elimine registros de ninguna tabla
+-- Esto se logra otorgando permisos SELECT, INSERT y UPDATE, pero no permisos DELETE
+
+-- Por seguridad, revocar todos los permisos que los usuarios puedan haber heredado previamente
+REVOKE ALL PRIVILEGES ON *.* FROM 'usuario_lectura'@'localhost';
+REVOKE ALL PRIVILEGES ON *.* FROM 'usuario_modificacion'@'localhost';
+
+-- Iniciar una transacción en la tabla Medicamentos
+START TRANSACTION;
+
+-- Verificar si la tabla Medicamentos tiene registros
+SELECT COUNT(*) FROM Medicamentos;
+
+-- Si hay registros en la tabla Medicamentos, eliminar algunos (comentar para evitar la eliminación)
+-- DELETE FROM Medicamentos WHERE <condición>;
+
+-- En caso de eliminación accidental, se puede usar ROLLBACK para deshacer la transacción
+-- ROLLBACK;
+
+-- En caso de éxito, confirmar los cambios en la transacción de la tabla Medicamentos
+-- COMMIT;
+
+-- Iniciar una nueva transacción en la tabla Lotes
+START TRANSACTION;
+
+-- Insertar ocho nuevos registros en la tabla Lotes
+INSERT INTO Lotes (id_med, nombre_med, fecha_ven, unidades) VALUES
+    (20151, 'Amoxicilina', '2023-12-31', 100),
+    (20152, 'Warfarina', '2023-11-30', 50),
+    (20153, 'Metoprolol', '2023-10-31', 75),
+    (20154, 'Insulina lispro', '2023-09-30', 60);
+
+-- Agregar un savepoint después de la inserción del registro #4
+SAVEPOINT savepoint_1;
+
+-- Continuar con la inserción de registros restantes en la tabla Lotes
+INSERT INTO Lotes (id_med, nombre_med, fecha_ven, unidades) VALUES
+    (20155, 'Risperidona', '2023-08-31', 700),
+    (20156, 'Diclofenaco', '2023-07-31', 400),
+    (20157, 'Pantoprazol', '2023-06-30', 300),
+    (20158, 'Venlafaxina', '2023-05-31', 500);
+
+-- Agregar un savepoint después de la inserción del registro #8
+SAVEPOINT savepoint_2;
+
+-- En caso de necesidad, eliminar el savepoint de los primeros 4 registros insertados
+-- ROLLBACK TO SAVEPOINT savepoint_1;
+
+-- Confirmar los cambios en la transacción de la tabla Lotes
+-- COMMIT;
